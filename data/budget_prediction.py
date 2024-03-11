@@ -11,7 +11,7 @@ from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import MinMaxScaler
 
-from data_handling import *
+from data.data_handling import *
 
 def encode_categorical_variables(df, columns):
     """
@@ -134,9 +134,17 @@ def preprocess_and_predict(df, new_data):
     selected_category = new_data.at[0, 'category']
     selected_month = new_data.at[0, 'month']
     
+    # Retrieve the encoded values for the selected category and month
     selected_category_encoded = df[df['category'] == selected_category]['category_encoded'].iloc[0]
-    selected_month_encoded = df[df['month'] == selected_month]['month_encoded'].iloc[0]
-
+    selected_month_row = df[df['month'] == selected_month]
+    
+    if not selected_month_row.empty:
+        selected_month_encoded = selected_month_row['month_encoded'].iloc[0]
+    else:
+        # Handle case where selected month does not exist in the DataFrame
+        # You can assign a default value or raise an exception based on your requirement
+        selected_month_encoded = -1  # Placeholder value
+    
     # Create a DataFrame with the encoded values
     new_data_encoded = pd.DataFrame({
         'category_encoded': [selected_category_encoded],
