@@ -56,7 +56,6 @@ with col2:
 selected_month_number = month_map[selected_month_name]
 show_top_5_categories_of_the_month(expense_transactions, selected_year, selected_month_number, 'Expense')
 
-
 # -------------------------------------------------------------------------
 # Comparison of A SPECIFIC CATEGORY between YEAR1 and YEAR2
 col1, col2, col3 = st.columns(3)

@@ -25,7 +25,6 @@ st.write(income_transactions)
 # TOP 5 CATEGORY in OVER THE TIME SERIES
 show_top_5_categories_over_the_time_series(income_transactions, 'Income')
 
-
 # -------------------------------------------------------------------------
 # TOP 5 CATEGORY in A SPECIFIC YEAR
 selected_year_time_series = st.selectbox(
