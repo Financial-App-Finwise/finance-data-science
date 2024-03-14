@@ -57,14 +57,15 @@ def preprocess_df(transaction_df, expense_category_df, income_category_df):
     
     for index, row in new_transaction_df.iterrows():
         if row['transaction_type'] == 'Income':
-            category_row = income_category_df[income_category_df['id'] == row['category']]
-            if category_row['level'].iloc[0] == 1:
-                parentID = category_row['parentID'].iloc[0]
-                new_transaction_df.at[index, 'category'] = income_category_df[income_category_df['id'] == parentID]['name'].iloc[0]
-                new_transaction_df.at[index, 'subcategory'] = category_row['name'].iloc[0]
-            else:
-                new_transaction_df.at[index, 'category'] = category_row['name'].iloc[0]
-                new_transaction_df.at[index, 'subcategory'] = category_row['parentID'].iloc[0]
+            category_row: pd.DataFrame = income_category_df[income_category_df['id'] == row['category']]
+            if (len(category_row) != 0):
+                if category_row['level'].iloc[0] == 1:
+                    parentID = category_row['parentID'].iloc[0]
+                    new_transaction_df.at[index, 'category'] = income_category_df[income_category_df['id'] == parentID]['name'].iloc[0]
+                    new_transaction_df.at[index, 'subcategory'] = category_row['name'].iloc[0]
+                else:
+                    new_transaction_df.at[index, 'category'] = category_row['name'].iloc[0]
+                    new_transaction_df.at[index, 'subcategory'] = category_row['parentID'].iloc[0]
         else:
             category_row = expense_category_df[expense_category_df['id'] == row['category']]
             if category_row['level'].iloc[0] == 1:
