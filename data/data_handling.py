@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import calendar 
 import streamlit as st 
-from data.processed_data import *
+from data.preprocessed_data_v2 import *
 
 @st.cache_data
 def load_data(path: str): 
@@ -157,7 +157,6 @@ month_map = {
 
 # df = load_data("transactions_v2.csv")
 # df = cleaned_data(preprocess_df)
-st.write(preprocess_transaction_df)
 df = handle_missing_values(preprocess_transaction_df)
 df = handle_duplicates(df)
 # df = add_date_columns(preprocess_df, "transaction_date")

@@ -16,7 +16,6 @@ unique_years = expense_transactions_df["year"].unique()
 additional_years = np.arange(unique_years.max() + 1, unique_years.max() + 6)
 selectable_years = np.concatenate((unique_years, additional_years))
 
-st.write(expense_transactions_df)
 # Streamlit app
 st.title('Budget Prediction App')
 
