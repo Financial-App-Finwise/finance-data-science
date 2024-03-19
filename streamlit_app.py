@@ -8,7 +8,8 @@ make_sidebar()
 st.session_state.logged_in = True
 # st.success("Logged in successfully!")
 # sleep(0.5)
-api_config.token = st.query_params['token']
+# api_config.token = st.query_params['token']
+api_config.token = '60|ISx3z8uJDwBzCOA0aN8ScKo2VqMrGjPEPZRvz4BX7e019b7e'
 print(api_config.token)
 st.switch_page("pages/page1_overview.py")
 # st.title("Welcome to FinWise")
