@@ -157,12 +157,12 @@ month_map = {
 
 # df = load_data("transactions_v2.csv")
 # df = cleaned_data(preprocess_df)
-df = handle_missing_values(preprocess_transaction_df)
-df = handle_duplicates(df)
+df = None
+df = None
 # df = add_date_columns(preprocess_df, "transaction_date")
 
 # Sort column
-sort_columns = ['year', 'month', 'day']
-df = sort_dataframe(df, sort_columns)
+sort_columns = None
+df = None
 
 

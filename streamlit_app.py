@@ -21,4 +21,14 @@ pre.expense_df, income_df = get_expense_income_df(pre.category_df)
 pre.preprocess_transaction_df = pre.transaction_df.copy()
 pre.preprocess_transaction_df = preprocess_df(pre.preprocess_transaction_df)
 
+# ----------------------------------------------
+import data.data_handling as data_handling
+data_handling.df = data_handling.handle_missing_values(pre.preprocess_transaction_df)
+data_handling.df = data_handling.handle_duplicates(data_handling.df)
+# df = add_date_columns(preprocess_df, "transaction_date")
+
+# Sort column
+sort_columns = ['year', 'month', 'day']
+df = data_handling.sort_dataframe(data_handling.df, sort_columns)
+
 st.switch_page("pages/page1_overview.py")

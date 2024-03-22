@@ -78,9 +78,9 @@ def preprocess_df(transaction_df):
     
     return new_transaction_df
 
-category_df: pd.DataFrame
-transaction_df: pd.DataFrame
-expense_df: pd.DataFrame
-income_df: pd.DataFrame
-preprocess_transaction_df: pd.DataFrame
+category_df = None
+transaction_df = None
+expense_df = None
+income_df = None
+preprocess_transaction_df = None
 # st.write(preprocess_transaction_df)

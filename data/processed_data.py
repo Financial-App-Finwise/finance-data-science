@@ -78,10 +78,8 @@ def preprocess_df(transaction_df, expense_category_df, income_category_df):
     
     return new_transaction_df
 
-transaction_df = get_df(transaction_api_url, token)
-
-category_df = get_df(categories_api_url, token)
-
-expense_df, income_df = get_expense_income_df(category_df)
-preprocess_transaction_df = transaction_df.copy()
-preprocess_transaction_df = preprocess_df(preprocess_transaction_df, expense_df, income_df)
+category_df = None
+transaction_df = None
+expense_df = None
+income_df = None
+preprocess_transaction_df = None
