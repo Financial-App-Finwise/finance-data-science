@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import plotly.express as px
 import calendar 
-import streamlit as st 
+import streamlit as st
+import datetime 
 
 def plot_pattern_over_time(df, x_column_name, y_column_name, title, rgb_color):
     df['month_year'] = df['year'].astype(str) + '-' + df['month'].astype(str)
@@ -21,11 +22,12 @@ def plot_pattern_over_time(df, x_column_name, y_column_name, title, rgb_color):
     
     fig.update_layout( 
         margin=dict(l=0, r=0, t=50, b=0),  # Adjust margin to fit the chart
+        hovermode="y"
     )
     
     st.plotly_chart(fig, use_container_width=True)
      
-def show_transaction_type_pattern_over_time(df, transaction_type):
+def show_transaction_type_pattern_over_time(df, transaction_type, rgb_color):
     # Filter transactions by transaction type
     transactions = df[df['transaction_type'] == transaction_type]
 
@@ -40,42 +42,55 @@ def show_transaction_type_pattern_over_time(df, transaction_type):
 
     # Create line plot
     fig = px.line(transaction_summary_time, x='month', y='total_amount', color='year',
-                  title=f'{transaction_type} Pattern over Time', markers=True)
-    st.write(fig)
+                  title=f'{transaction_type} Pattern over Time', markers=True, 
+                  color_discrete_sequence=[rgb_color],
+                  )
+    st.plotly_chart(fig, use_container_width=True)
+    
+def get_current_month_and_year():
+    # Get the current date
+    current_date = datetime.datetime.now()
+    # Extract the year and month from the current date
+    current_year = current_date.year
+    current_month = current_date.month
+    return current_year, current_month
 
 def get_truncated_total_amount(monthly_summary_pivot, data_type):
-    # Find the highest year in the DataFrame
-    highest_year = monthly_summary_pivot['year'].max()
+    # Get the current year and month
+    current_year, current_month = get_current_month_and_year()
 
-    # Filter the DataFrame to include only rows where the year matches the highest year
-    highest_year_data = monthly_summary_pivot[monthly_summary_pivot['year'] == highest_year]
+    # Filter the DataFrame to include only rows where the year matches the current year
+    current_year_data = monthly_summary_pivot[monthly_summary_pivot['year'] == current_year]
 
-    # Find the highest month among the rows with the highest year
-    highest_month = highest_year_data['month'].max()
+    # Retrieve the total_balance value corresponding to the current year and month
+    total_amount_current_year_month = round(current_year_data[current_year_data['month'] == current_month][data_type].values[0], 2)
 
-    # Retrieve the total_balance value corresponding to the highest year and highest month
-    total_amount_highest_year_month = round(highest_year_data[highest_year_data['month'] == highest_month][data_type].values[0], 2)
-
-    return total_amount_highest_year_month
+    return total_amount_current_year_month
 
 def compare_total_balance_percentage(monthly_summary_pivot, data_type):
-    # Sort the dataframe by month
-    monthly_summary_pivot.sort_values(by='month', inplace=True)
+    # Get the current year and month
+    current_year, current_month = get_current_month_and_year()
+
+    # Filter the DataFrame to include only rows where the year matches the current year
+    current_year_data = monthly_summary_pivot[monthly_summary_pivot['year'] == current_year]
+
+    # Retrieve the total_balance value corresponding to the current year and month
+    total_amount_current_year_month = round(current_year_data[current_year_data['month'] == current_month][data_type].values[0], 2)
+
+    # Retrieve the total_balance value for the previous month
+    previous_month = current_month - 1 if current_month > 1 else 12
+    previous_year = current_year if current_month > 1 else current_year - 1
+    previous_month_data = monthly_summary_pivot[(monthly_summary_pivot['year'] == previous_year) & (monthly_summary_pivot['month'] == previous_month)]
     
-    # Get the current month index
-    current_month_index = monthly_summary_pivot['month'].idxmax()
+    if previous_month_data.empty:
+        return "No data availabe"
     
-    # Get the total_balance for this month
-    current_total_balance = monthly_summary_pivot.iloc[current_month_index][data_type]
-    
-    # Get the total_balance for last month
-    last_month_index = current_month_index - 1 if current_month_index > 0 else len(monthly_summary_pivot) - 1
-    last_total_balance = monthly_summary_pivot.iloc[last_month_index][data_type]
-    
+    total_amount_previous_month = round(previous_month_data[data_type].values[0], 2)
+
     # Calculate the percentage change
-    percentage_change = round(((current_total_balance - last_total_balance) / last_total_balance) * 100, 2)
-    
-    return percentage_change
+    percentage_change = round(((total_amount_current_year_month - total_amount_previous_month) / abs(total_amount_previous_month)) * 100, 2)
+
+    return f"{percentage_change}% vs last month"
 
 def filter_last_x_months(monthly_summary_pivot, last_x_month):
     last_x_months_data = monthly_summary_pivot.tail(last_x_month)
@@ -93,15 +108,23 @@ def create_income_expense_bar_chart(monthly_summary_pivot, selected_range):
     }
 
     # Retrieve the number of months to filter
-    last_x_month = range_mapping[selected_range]
-    
+    last_x_month = range_mapping.get(selected_range, 0)  # Default to 0 if selected range is not found
+
     # Filter the data based on the selected range
     last_x_months_data = filter_last_x_months(monthly_summary_pivot, last_x_month)
+    
+    if last_x_months_data.empty:
+        st.write("No data available for the selected range.")
+        return
+
+    # Format the 'y' values with a dollar sign
+    last_x_months_data['Income'] = last_x_months_data['Income'].apply(lambda x: f"${x:.2f}")
+    last_x_months_data['Expense'] = last_x_months_data['Expense'].apply(lambda x: f"${x:.2f}")
 
     # Create a bar chart using Plotly
     fig = go.Figure(data=[
-        go.Bar(name='Income', x=last_x_months_data['year'].astype(str) + '-' + last_x_months_data['month'].astype(str), y=last_x_months_data['Income'], marker_color='rgb(10, 189, 227)'),
-        go.Bar(name='Expense', x=last_x_months_data['year'].astype(str) + '-' + last_x_months_data['month'].astype(str), y=last_x_months_data['Expense'], marker_color='rgb(238, 83, 83)')
+        go.Bar(name='Income', x=last_x_months_data['year'].astype(str) + '-' + last_x_months_data['month'].astype(str), y=last_x_months_data['Income'], marker_color='rgb(10, 189, 227)', hoverinfo='y', text=last_x_months_data['Income'], textposition='outside'),
+        go.Bar(name='Expense', x=last_x_months_data['year'].astype(str) + '-' + last_x_months_data['month'].astype(str), y=last_x_months_data['Expense'], marker_color='rgb(238, 83, 83)', hoverinfo='y', text=last_x_months_data['Expense'], textposition='outside')
     ])
 
     # Update the layout
