@@ -15,11 +15,6 @@ import altair as alt
 
 make_sidebar()
 
-# import plostst
-# st.set_page_config(layout='wide', initial_sidebar_state='expanded')
-# st.write(df)
-# st.write(df.dtypes)
-
 # -----------------------------------------------------------------
 # DATA SECTION
 # Generate monthly summary pivot table
@@ -40,16 +35,15 @@ range_mapping = {
     "Last 9 Months": 9,
     "Last Year": 12,
 }
-# st.write("Percentage change in total balance:", percentage_change, "%")
 # -----------------------------------------------------------------
 
 # -----------------------------------------------------------------
 # Top Content
 st.title("My Personal Finance Overview")
 col1, col2, col3 = st.columns(3)
-col1.metric("Balance", f'${total_balance}', f"{total_balance_percentage_comparison}% vs last month")
-col2.metric("Income", f'${total_income}', f"{total_income_percentage_comparison}% vs last month")
-col3.metric("Expense", f'${total_expense}', f"{total_expense_percentage_comparison}% vs last month")
+col1.metric("Balance", f'${total_balance}', f"{total_balance_percentage_comparison}")
+col2.metric("Income", f'${total_income}', f"{total_income_percentage_comparison}")
+col3.metric("Expense", f'${total_expense}', f"{total_expense_percentage_comparison}")
 
 # End of Top Content
 # -----------------------------------------------------------------

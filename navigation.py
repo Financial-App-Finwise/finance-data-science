@@ -4,6 +4,7 @@ from streamlit.runtime.scriptrunner import get_script_run_ctx
 from streamlit.source_util import get_pages
 
 
+
 def get_current_page_name():
     ctx = get_script_run_ctx()
     if ctx is None:
@@ -21,10 +22,14 @@ def make_sidebar():
         st.write("")
 
         if st.session_state.get("logged_in", False):
-            st.page_link("pages/page1_overview.py", label="Overview", icon="🌐")
-            st.page_link("pages/page2_expense.py", label="Expense", icon="💸")
-            st.page_link("pages/page3_income.py", label="Income", icon="💰")
-            st.page_link("pages/page4_budget_prediction.py", label="Budget Prediction", icon="📈")
+            if st.page_link("pages/page1_overview.py", label="Overview", icon="🌐"):
+                st.session_state.sidebar_closed = True
+            if st.page_link("pages/page2_expense.py", label="Expense", icon="💸"):
+                st.session_state.sidebar_closed = True
+            if st.page_link("pages/page3_income.py", label="Income", icon="💰"):
+                st.session_state.sidebar_closed = True
+            if st.page_link("pages/page4_budget_prediction.py", label="Budget Prediction", icon="📈"):
+                st.session_state.sidebar_closed = True
 
             st.write("")
             st.write("")
