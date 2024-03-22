@@ -78,10 +78,9 @@ def preprocess_df(transaction_df):
     
     return new_transaction_df
 
-category_df = get_df(categories_api_url, token)
-transaction_df = get_df(transaction_api_url, token)
-expense_df, income_df = get_expense_income_df(category_df)
-
-preprocess_transaction_df = transaction_df.copy()
-preprocess_transaction_df = preprocess_df(preprocess_transaction_df)
+category_df: pd.DataFrame
+transaction_df: pd.DataFrame
+expense_df: pd.DataFrame
+income_df: pd.DataFrame
+preprocess_transaction_df: pd.DataFrame
 # st.write(preprocess_transaction_df)
