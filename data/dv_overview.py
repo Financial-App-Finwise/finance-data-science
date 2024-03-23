@@ -22,14 +22,14 @@ def plot_pattern_over_time(df, x_column_name, y_column_name, title, rgb_color):
     
     fig.update_layout( 
         margin=dict(l=0, r=0, t=50, b=0),  # Adjust margin to fit the chart
-        hovermode="y"
+        hovermode="y",
     )
     
     fig.update_xaxes(
         tickformat='%Y-%m'
     )
-    
-    st.plotly_chart(fig, use_container_width=True)
+    config = {'displayModeBar': False}
+    st.plotly_chart(fig, use_container_width=True, config=config)
      
 def show_transaction_type_pattern_over_time(df, transaction_type, rgb_color):
     # Filter transactions by transaction type
@@ -49,7 +49,8 @@ def show_transaction_type_pattern_over_time(df, transaction_type, rgb_color):
                   title=f'{transaction_type} Pattern over Time', markers=True, 
                   color_discrete_sequence=[rgb_color],
                   )
-    st.plotly_chart(fig, use_container_width=True)
+    config = {'displayModeBar': False}
+    st.plotly_chart(fig, use_container_width=True, config=config)
     
 def get_current_month_and_year():
     # Get the current date
@@ -139,7 +140,7 @@ def create_income_expense_bar_chart(monthly_summary_pivot, selected_range):
         autosize=True,  # Set autosize to make the chart responsive
         margin=dict(l=0, r=0, t=50, b=0),  # Adjust margin to fit the chart
     )
-
+    config = {'displayModeBar': False}
     # Render the chart using Streamlit
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, config=config)
     
