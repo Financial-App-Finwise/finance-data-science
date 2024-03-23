@@ -10,18 +10,20 @@ from data.data_handling import *
 from data.dv_overview import *
 from data.dv_transactiontype import *
 from data.dv_goal import *
+import api_config
 from api_config import *
 from style.theme import *
 import altair as alt
+import data.preprocessed_data_v2 as pre
 
 make_sidebar()
 
 # -----------------------------------------------------------------
 # DATA SECTION
-goal_filtered_df = preprocess_goal_df(goal_api_df)
+goal_filtered_df = pre.preprocess_goal_df(pre.goal_api_df)
 
-transaction_goal_df = convert_json_to_df(transaction_goal_api_url, token)
-transaction_goal_df = preprocess_goal_transaction_df(transaction_goal_df)
+transaction_goal_df = pre.convert_json_to_df(transaction_goal_api_url, api_config.token)
+transaction_goal_df = pre.preprocess_goal_transaction_df(transaction_goal_df)
 
 num_goals = count_num_goal(goal_filtered_df)
 total_amount = calculate_total_goal_amount(goal_filtered_df)
