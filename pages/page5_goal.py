@@ -7,8 +7,8 @@ import plotly.graph_objects as go
 import numpy as np
 from datetime import datetime, timedelta
 from data.data_handling import *
-from data.dv_overview import *
-from data.dv_transactiontype import *
+# from data.dv_overview import *
+# from data.dv_transactiontype import *
 from data.dv_goal import *
 from api_config import *
 from style.theme import *
