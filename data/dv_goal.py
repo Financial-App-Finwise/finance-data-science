@@ -183,6 +183,10 @@ def plot_amount_over_time(contributed_amount_df, progress_color, expected_color)
         xaxis_title='Month',
         yaxis_title='Amount'
     )
+    
+    fig.update_xaxes(
+        tickformat='%Y-%m'
+    )
 
     # Render the chart using Plotly
     st.plotly_chart(fig, use_container_width=True)
