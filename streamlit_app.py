@@ -14,9 +14,9 @@ token = st.query_params['token']
 import data.preprocessed_data_v2 as pre
 
 pre.category_df = pre.get_df(api_config.categories_api_url, token)
-pre.transaction_df = pre.get_df(api_config.transaction_api_url, token)
+pre.transaction_df = pre.convert_json_to_df(api_config.transaction_api_url, token)
+pre.goal_api_df = pre.convert_json_to_df(api_config.goal_api_url, token)
 pre.expense_df, income_df = pre.get_expense_income_df(pre.category_df)
-
 pre.preprocess_transaction_df = pre.transaction_df.copy()
 pre.preprocess_transaction_df = pre.preprocess_df(pre.preprocess_transaction_df)
 
