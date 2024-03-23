@@ -96,8 +96,7 @@ def get_parent_category_name(category_data_id):
 
 
 # preprocess transaction df 
-def preprocess_df(transaction_df): 
-     
+def preprocess_df(transaction_df):
     transaction_df['amount'] = transaction_df['amount'].astype(float)
     transaction_df['date'] = pd.to_datetime(transaction_df['date'])
     
@@ -135,10 +134,9 @@ def preprocess_goal_transaction_df(transaction_goal_df):
     
     return transaction_goal_df
 
-category_df = get_df(categories_api_url, token)
-transaction_df = convert_json_to_df(transaction_api_url, token)
-goal_api_df = convert_json_to_df(goal_api_url, token)
-expense_df, income_df = get_expense_income_df(category_df)
-
-preprocess_transaction_df = transaction_df.copy()
-preprocess_transaction_df = preprocess_df(preprocess_transaction_df)
+category_df = None
+transaction_df = None
+goal_api_df = None
+expense_df = None
+income_df = None
+preprocess_transaction_df = None
