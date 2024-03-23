@@ -45,20 +45,24 @@ show_top_5_categories_donut_chart(income_transactions, selected_year_time_series
 # -------------------------------------------------------------------------
 # TOP 5 CATEGORY of A SPECIFIC MONTH in A SPECIFIC YEAR
 title_top_5_ctg_m_y = st.empty()
-selected_month_name = datetime.datetime.now().strftime('%B')
+current_month_name = datetime.datetime.now().strftime('%B')
+selected_month_name = st.session_state.selected_month_name if 'selected_month_name' in st.session_state else current_month_name
+# selected_month_name = datetime.datetime.now().strftime('%B')
 selected_year = datetime.datetime.now().year
 title_top_5_ctg_m_y.markdown(f"#### Top 5 income categories of {selected_month_name} in {selected_year}")
 col1, col2 = st.columns(2)
 with col1: 
     selected_month_name = st.selectbox(
     "Select a month",
-    list(month_map.keys())
+    list(month_map.keys()),
+    index=list(month_map.keys()).index(selected_month_name)
 )
     
 with col2: 
     selected_year = st.selectbox(
         "Select year:",
         income_transactions["year"].unique(),
+        index=income_transactions["year"].unique().tolist().index(selected_year)
     )
     
 title_top_5_ctg_m_y.markdown(f"#### Top 5 income category of {selected_month_name} in {selected_year}")

@@ -25,6 +25,10 @@ def plot_pattern_over_time(df, x_column_name, y_column_name, title, rgb_color):
         hovermode="y"
     )
     
+    fig.update_xaxes(
+        tickformat='%Y-%m'
+    )
+    
     st.plotly_chart(fig, use_container_width=True)
      
 def show_transaction_type_pattern_over_time(df, transaction_type, rgb_color):

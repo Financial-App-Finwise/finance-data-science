@@ -30,6 +30,8 @@ def make_sidebar():
                 st.session_state.sidebar_closed = True
             if st.page_link("pages/page4_budget_prediction.py", label="Budget Prediction", icon="📈"):
                 st.session_state.sidebar_closed = True
+            if st.page_link("pages/page5_goal.py", label="Smart Goal", icon="🏆"):
+                st.session_state.sidebar_closed = True
 
             st.write("")
             st.write("")
