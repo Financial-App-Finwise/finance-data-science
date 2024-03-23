@@ -52,3 +52,4 @@ st.write(f"Predicted amount: {predicted_amount_original}")
 
 
 
+

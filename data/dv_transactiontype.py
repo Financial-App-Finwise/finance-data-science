@@ -7,6 +7,7 @@ import calendar
 import streamlit as st 
 import datetime
 
+
 def show_top_5_categories_donut_chart(df, year, transaction_type_str, colors):
     
     if df.empty or df['total_amount'].sum() == 0:
