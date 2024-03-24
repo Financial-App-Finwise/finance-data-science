@@ -41,9 +41,9 @@ def show_top_5_categories_donut_chart(df, year, transaction_type_str, colors):
     
     # Set layout options
     fig.update_layout(showlegend=True)
-
+    config = {'displayModeBar': False}
     # Show the chart
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, config=config)
     
 def show_top_5_categories_over_the_time_series(df, transaction_type_str, colors):
     if df.empty or df['total_amount'].sum() == 0:
@@ -72,9 +72,10 @@ def show_top_5_categories_over_the_time_series(df, transaction_type_str, colors)
                                   )])
     # Set layout options
     fig.update_layout(showlegend=True)
+    config = {'displayModeBar': False}
 
     # Show the chart
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, config=config)
     
 def show_top_5_categories_of_the_month(df, year, month, transaction_type_str, colors):
     
@@ -101,9 +102,10 @@ def show_top_5_categories_of_the_month(df, year, month, transaction_type_str, co
                                   )])
     # Set layout options
     fig.update_layout(showlegend=False)
+    config = {'displayModeBar': False}
 
     # Show the chart
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, config=config)
     
 def compare_category_between_years(df, category, year1, year2):
     st.markdown(f"#### Comparison of {category} between {year1} and {year2}")
@@ -129,9 +131,10 @@ def compare_category_between_years(df, category, year1, year2):
     # Set layout options
     fig.update_layout(barmode='group',
                       xaxis_title='Category', yaxis_title='Total Amount')
+    config = {'displayModeBar': False}
 
     # Show the chart
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, config=config)
     
 def compare_category_between_months(df, category, year, month1, month2):
     st.markdown(f"#### Comparison of {category} between {month1} and {month2} of {year}")
@@ -156,9 +159,10 @@ def compare_category_between_months(df, category, year, month1, month2):
     # Set layout options
     fig.update_layout(barmode='group', title=f'Comparison of {category} between {month1} and {month2} of {year}',
                       xaxis_title='Month', yaxis_title='Total Amount')
+    config = {'displayModeBar': False}
 
     # Show the chart
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, config=config)
     
     
 def compare_total_expense_between_years(df, year1, year2):

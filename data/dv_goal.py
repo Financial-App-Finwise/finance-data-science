@@ -90,9 +90,10 @@ def plot_amount_of_money(goal_filtered_df, rgb_color):
         yaxis_title='Amount of Money / Current Save',
         xaxis_tickangle=-45,  # Rotate x-axis labels for better readability
     )
+    config = {'displayModeBar': False}
 
     # Render the chart
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, config=config)
     
     
 def plot_contribution_over_months(transaction_goal_df, selected_goal_id, user_contributed_color):
@@ -115,7 +116,9 @@ def plot_contribution_over_months(transaction_goal_df, selected_goal_id, user_co
         yaxis_title='Contribution Amount',
         xaxis=dict(tickmode='linear'),
     )
-    st.plotly_chart(fig, use_container_width=True)
+    config = {'displayModeBar': False}
+
+    st.plotly_chart(fig, use_container_width=True, config=config)
     
 def get_contributed_amount(selected_goal_id, goal_filtered_df, transaction_goal_df):
     # Get the start date and end date
@@ -188,5 +191,7 @@ def plot_amount_over_time(contributed_amount_df, progress_color, expected_color)
         tickformat='%Y-%m'
     )
 
+    config = {'displayModeBar': False}
+
     # Render the chart using Plotly
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, config=config)

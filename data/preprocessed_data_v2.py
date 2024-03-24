@@ -96,41 +96,111 @@ def get_parent_category_name(category_data_id):
 
 
 # preprocess transaction df 
-def preprocess_df(transaction_df):
-    transaction_df['amount'] = transaction_df['amount'].astype(float)
-    transaction_df['date'] = pd.to_datetime(transaction_df['date'])
+def preprocess_df(transaction_df): 
+    if transaction_df.empty:
+        print("Warning: Input DataFrame is empty. Initializing with zeros.")
+        df = pd.DataFrame(columns=['transaction_type', 'transaction_amount', 'transaction_date', 
+                                    'transaction_note', 'category', 'subcategory', 'day', 'month', 'year'],
+                          dtype={'transaction_amount': float, 'day': int, 'month': int, 'year': int})
+        # Fill numerical columns with zeros
+        df['transaction_amount'] = 0
+        df['day'] = 0
+        df['month'] = 0
+        df['year'] = 0
+        print(df)
+        return df
     
-    new_transaction_df = pd.DataFrame({
-        'transaction_type': transaction_df['isIncome'].apply(lambda x: 'Income' if x == 1 else 'Expense'),
-        'transaction_amount': transaction_df['amount'],
-        'transaction_date': transaction_df['date'],
-        'transaction_note': transaction_df['note'],
-        'category': transaction_df.apply(get_category_name, axis = 1),  # You might want to map categoryID to actual category names
-        'subcategory': transaction_df.apply(get_subcategory_name, axis=1),  # Assuming expenseType represents subcategory
-        'day': transaction_df['date'].dt.day,
-        'month': transaction_df['date'].dt.month,
-        'year': transaction_df['date'].dt.year
-    })
+    try:
+        # Convert 'amount' column to float
+        transaction_df['amount'] = transaction_df['amount'].astype(float)
+        
+        # Convert 'date' column to datetime
+        transaction_df['date'] = pd.to_datetime(transaction_df['date'])
+        
+        # Create new DataFrame with processed columns
+        new_transaction_df = pd.DataFrame({
+            'transaction_type': transaction_df['isIncome'].apply(lambda x: 'Income' if x == 1 else 'Expense'),
+            'transaction_amount': transaction_df['amount'],
+            'transaction_date': transaction_df['date'],
+            'transaction_note': transaction_df['note'],
+            # Assuming get_category_name and get_subcategory_name functions are defined elsewhere
+            'category': transaction_df.apply(get_category_name, axis=1),  # You might want to map categoryID to actual category names
+            'subcategory': transaction_df.apply(get_subcategory_name, axis=1),  # Assuming expenseType represents subcategory
+            'day': transaction_df['date'].dt.day,
+            'month': transaction_df['date'].dt.month,
+            'year': transaction_df['date'].dt.year
+        })
+        
+    except KeyError as e:
+        return None
+    
+    except Exception as e:
+        return None
     
     return new_transaction_df
 
 def preprocess_goal_df(goal_df): 
+    if goal_df.empty:
+        print("Warning: Input DataFrame is empty. Initializing with default values.")
+        # Create an empty DataFrame with desired columns
+        goal_filtered_df = pd.DataFrame(columns=['id', 'name', 'amount', 'currentSave', 'remainingSave', 
+                                                  'setDate', 'startDate', 'endDate', 'monthlyContribution', 
+                                                  'transactionCount', 'name_id'],
+                                        dtype={'amount': float, 'currentSave': float, 'remainingSave': float,
+                                               'monthlyContribution': float, 'transactionCount': int})
+        # Fill numerical columns with zeros
+        goal_filtered_df['amount'] = 0.0
+        goal_filtered_df['currentSave'] = 0.0
+        goal_filtered_df['remainingSave'] = 0.0
+        goal_filtered_df['monthlyContribution'] = 0.0
+        goal_filtered_df['transactionCount'] = 0
+        return goal_filtered_df
     
-    goal_filtered_df = goal_df[['id', 'name', 'amount', 'currentSave', 'remainingSave', 'setDate', 
-             'startDate', 'endDate', 'monthlyContribution', 'transactionCount']]
+    try:
+        # Filter and select desired columns
+        goal_filtered_df = goal_df[['id', 'name', 'amount', 'currentSave', 'remainingSave', 'setDate', 
+                                    'startDate', 'endDate', 'monthlyContribution', 'transactionCount']]
+        
+        # Convert 'startDate' and 'endDate' columns to datetime
+        goal_filtered_df['startDate'] = pd.to_datetime(goal_filtered_df['startDate'])
+        goal_filtered_df['endDate'] = pd.to_datetime(goal_filtered_df['endDate'])
+        
+        # Concatenate 'name' and 'id' columns to create 'name_id'
+        goal_filtered_df['name_id'] = goal_filtered_df['name'] + '_' + goal_filtered_df['id'].astype(str)
+        
+    except KeyError as e:
+        return None
     
-    goal_filtered_df['startDate'] = pd.to_datetime(goal_filtered_df['startDate'])
-    goal_filtered_df['endDate'] = pd.to_datetime(goal_filtered_df['endDate'])
-    goal_filtered_df['name_id'] = goal_filtered_df['name'] + '_' + goal_filtered_df['id'].astype(str)
-
+    except Exception as e:
+        return None
+    
     return goal_filtered_df
 
 def preprocess_goal_transaction_df(transaction_goal_df): 
-    transaction_goal_df['created_at'] = pd.to_datetime(transaction_goal_df['created_at'])
-    transaction_goal_df['updated_at'] = pd.to_datetime(transaction_goal_df['updated_at'])
-    transaction_goal_df['date'] = transaction_goal_df['created_at'].dt.date
-    transaction_goal_df['month'] = transaction_goal_df['created_at'].dt.month
-    transaction_goal_df['year'] = transaction_goal_df['created_at'].dt.year
+    if transaction_goal_df.empty:
+        # Assign default values to each column
+        transaction_goal_df['created_at'] = pd.to_datetime(None)
+        transaction_goal_df['updated_at'] = pd.to_datetime(None)
+        transaction_goal_df['date'] = None
+        transaction_goal_df['month'] = 0
+        transaction_goal_df['year'] = 0
+        return transaction_goal_df
+    
+    try:
+        # Convert 'created_at' and 'updated_at' columns to datetime
+        transaction_goal_df['created_at'] = pd.to_datetime(transaction_goal_df['created_at'])
+        transaction_goal_df['updated_at'] = pd.to_datetime(transaction_goal_df['updated_at'])
+        
+        # Extract date, month, and year from 'created_at' column
+        transaction_goal_df['date'] = transaction_goal_df['created_at'].dt.date
+        transaction_goal_df['month'] = transaction_goal_df['created_at'].dt.month
+        transaction_goal_df['year'] = transaction_goal_df['created_at'].dt.year
+        
+    except KeyError as e:
+        return None
+    
+    except Exception as e:
+        return None
     
     return transaction_goal_df
 
